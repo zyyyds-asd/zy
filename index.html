@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moment · 独立空间朋友圈</title>
+  <meta name="description" content="Moment · 独立空间朋友圈：纯前端朋友圈页面，打开即用，数据保存在本机浏览器。" />
+  <meta name="theme-color" content="#059669" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Moment · 独立空间朋友圈" />
+  <meta property="og:description" content="独立空间朋友圈，纯静态网页，打开即用。" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23059669'/%3E%3Ccircle cx='12' cy='13' r='3' fill='%23ffffff'/%3E%3Ccircle cx='21' cy='13' r='3' fill='%23ffffff' opacity='.65'/%3E%3Crect x='8' y='20' width='16' height='3' rx='1.5' fill='%23ffffff' opacity='.8'/%3E%3C/svg%3E" />
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 字体已改用系统字体，避免国内访问 Google Fonts 超时 -->
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC', sans-serif;
+      background-color: #f1f5f9;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Custom scrollbar for sleek desktop viewing */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.45);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.7);
+    }
+    /* Smooth animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.22s ease-out forwards;
+    }
+    /* WeChat Moments link color */
+    .text-moments-link {
+      color: #576b95;
+    }
+    .bg-moments-panel {
+      background-color: #f8fafc;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <!-- Toast Notification Container (Replaces alert()) -->
+  <div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-[110] flex flex-col gap-2 pointer-events-none w-11/12 max-w-md"></div>
+
+  <!-- Main Desktop Application Shell -->
+  <div id="app-shell" class="w-full min-h-screen flex flex-col">
+
+    <!-- ==================== 1. DESKTOP LOGIN / REGISTER SCREEN ==================== -->
+    <div id="login-view" class="hidden flex-1 flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-slate-100 via-emerald-50/30 to-slate-200 animate-fade-in">
+      <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden grid grid-cols-1 md:grid-cols-12">
+        
+        <!-- Left Brand & Feature Showcase Panel -->
+        <div class="md:col-span-5 bg-slate-900 text-white p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-emerald-500/15 blur-2xl"></div>
+          <div class="absolute -left-12 -bottom-12 w-56 h-56 rounded-full bg-teal-500/10 blur-2xl"></div>
+          
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/30 mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 3a9 9 0 0 1 7.8 4.5M20.5 9.5a9 9 0 0 1-3.2 9.5M15.5 20.3a9 9 0 0 1-9.8-1.5M4.2 16.5A9 9 0 0 1 6.5 5.2"></path>
+              </svg>
+            </div>
+            <h1 class="text-2xl lg:text-3xl font-bold tracking-tight">Moment · 桌面朋友圈</h1>
+            <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+              专为电脑宽屏打造的独立社交记录空间。无需添加好友，支持手机号精准搜索访问、多媒体图文视频发布与多维度隐私过滤。
+            </p>
+          </div>
+
+          <div class="relative z-10 space-y-3 pt-8 border-t border-slate-800 text-xs text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>账号完全独立 · 严格禁止添加好友关系</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>支持多图宫格与高清视频本地持久化存储</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>支持「仅看最近一个月」及单条/全局屏蔽</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Login Form & Demo Switcher -->
+        <div class="md:col-span-7 p-8 lg:p-10 flex flex-col justify-between bg-white">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">手机号登录 / 自动注册</h2>
+            <p class="text-xs text-slate-500 mt-1">未注册的手机号验证后将自动创建独立空间账号</p>
+
+            <form id="login-form" class="mt-6 space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">手机号码</label>
+                <div class="relative flex items-center">
+                  <span class="absolute left-3.5 text-sm font-medium text-slate-500 select-none">+86</span>
+                  <input id="login-phone" type="tel" maxlength="11" placeholder="请输入11位手机号"
+                    class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">短信验证码</label>
+                <div class="flex gap-2.5">
+                  <input id="login-code" type="text" maxlength="6" placeholder="6位验证码"
+                    class="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+                  <button type="button" id="btn-send-code"
+                    class="px-4 py-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 active:scale-[0.98] font-medium text-xs rounded-xl transition whitespace-nowrap border border-emerald-200">
+                    获取验证码
+                  </button>
+                </div>
+                <p id="mock-code-hint" class="hidden text-xs text-emerald-600 mt-1.5 font-medium"></p>
+              </div>
+
+              <!-- Optional Nickname for new accounts -->
+              <div id="new-user-nickname-box" class="hidden animate-fade-in">
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">首次登录 · 设置昵称</label>
+                <input id="login-nickname" type="text" maxlength="16" placeholder="给自己起个名字（选填）"
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+              </div>
+
+              <button type="submit"
+                class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-md shadow-emerald-600/20 transition text-sm mt-2">
+                立即进入朋友圈
+              </button>
+            </form>
+          </div>
+
+          <!-- Quick Demo Account Switcher for Instant Testing -->
+          <div class="mt-8 pt-5 border-t border-slate-100">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">现有演示账号（点击一键登录）</span>
+              <button type="button" id="btn-reset-demo-login" class="text-[11px] text-emerald-600 hover:underline font-medium">
+                恢复默认演示数据
+              </button>
+            </div>
+            <div id="demo-accounts-list" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 2. DESKTOP 3-COLUMN AUTHENTICATED APP ==================== -->
+    <div id="main-view" class="hidden flex-1 w-full max-w-[1380px] mx-auto px-4 lg:px-6 py-5 grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)_310px] gap-6 items-start">
+
+      <!-- ==================== LEFT SIDEBAR (Fixed ~250px on Desktop) ==================== -->
+      <aside class="lg:sticky lg:top-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 flex flex-col justify-between lg:min-h-[calc(100vh-2.5rem)]">
+        <div class="space-y-5">
+          <!-- Brand Header -->
+          <div class="flex items-center justify-between px-1">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 3a9 9 0 0 1 7.8 4.5M20.5 9.5a9 9 0 0 1-3.2 9.5M15.5 20.3a9 9 0 0 1-9.8-1.5M4.2 16.5A9 9 0 0 1 6.5 5.2"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900 leading-tight">Moment 朋友圈</div>
+                <div class="text-[10px] text-slate-400 font-medium">桌面宽屏 · 无好友版</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current User Profile Card -->
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+            <div class="flex items-center gap-3">
+              <img id="sidebar-user-avatar" src="" alt="头像" class="w-11 h-11 rounded-xl object-cover border border-white shadow-xs bg-slate-200 shrink-0" />
+              <div class="min-w-0 flex-1">
+                <div id="sidebar-user-name" class="text-sm font-bold text-slate-900 truncate">用户</div>
+                <div id="sidebar-user-phone" class="text-[11px] text-slate-500 font-mono mt-0.5">13800138000</div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/70 flex items-center justify-between text-[11px]">
+              <span class="text-slate-500">我发布的动态</span>
+              <span id="sidebar-post-count" class="font-bold text-slate-800">0 条</span>
+            </div>
+          </div>
+
+          <!-- Primary Publish CTA Button -->
+          <button id="btn-open-composer"
+            class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold text-sm shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>发布新动态</span>
+          </button>
+
+          <!-- Vertical Navigation Menu -->
+          <nav class="space-y-1">
+            <button id="nav-discover" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-700 transition">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" />
+              </svg>
+              <span>发现广场</span>
+            </button>
+
+            <button id="nav-my-profile" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span>我的主页</span>
+            </button>
+
+            <button id="nav-privacy" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <span>隐私与账号设置</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Bottom Account & Danger Zone -->
+        <div class="pt-4 mt-6 border-t border-slate-100 space-y-2">
+          <button type="button" id="btn-logout-sidebar"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span>退出当前登录</span>
+          </button>
+
+          <button type="button" id="btn-open-delete-account"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 bg-rose-50/70 hover:bg-rose-100/80 border border-rose-200/60 transition">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span>注销并删除账号</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- ==================== CENTER MAIN FEED COLUMN (~720px) ==================== -->
+      <main id="content-area" class="w-full max-w-[740px] mx-auto bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col min-h-[calc(100vh-2.5rem)]">
+
+        <!-- Top Sticky Header inside Main Column -->
+        <header class="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-100 px-5 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <button id="btn-back-home" class="hidden p-1.5 -ml-1.5 rounded-lg hover:bg-slate-100 text-slate-700 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <h2 id="header-title" class="text-base font-bold text-slate-900 tracking-tight">朋友圈广场</h2>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium">独立空间 · 禁止加好友</span>
+          </div>
+
+          <div class="text-xs text-slate-400 hidden sm:block">
+            按发布时间倒序展示可见动态
+          </div>
+        </header>
+
+        <!-- Search Bar Section (Visible on Discover / Search Tab) -->
+        <div id="search-bar-section" class="px-5 pt-4 pb-3 bg-white border-b border-slate-100">
+          <div class="relative flex items-center">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+            </svg>
+            <input id="account-search-input" type="text" placeholder="输入11位手机号或用户昵称，直接查看对方朋友圈（无需添加好友）..."
+              class="w-full pl-10 pr-9 py-2.5 bg-slate-100/80 border border-transparent focus:border-emerald-500/40 focus:bg-white rounded-xl text-sm focus:outline-none transition" />
+            <button id="btn-clear-search" class="hidden absolute right-3 text-slate-400 hover:text-slate-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Search Results Dropdown / Panel -->
+          <div id="search-results-panel" class="hidden mt-3 bg-slate-50 rounded-2xl p-3 border border-slate-200/70 space-y-2 animate-fade-in">
+            <div class="flex items-center justify-between px-1">
+              <span class="text-[11px] font-semibold text-slate-500">匹配的独立账号（点击直接进入主页）</span>
+            </div>
+            <div id="search-results-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Cover Banner Header (Shown on My Profile or Target User Profile) -->
+        <div id="profile-cover-section" class="hidden relative pb-6 border-b border-slate-100">
+          <div class="h-60 w-full bg-slate-800 relative overflow-hidden group">
+            <img id="profile-cover-img" src="" alt="封面" class="w-full h-full object-cover opacity-90 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/15"></div>
+
+            <!-- Change Cover Button (Only when viewing own profile) -->
+            <label id="btn-change-cover" class="hidden cursor-pointer absolute top-4 right-4 px-3.5 py-1.5 rounded-full bg-black/45 hover:bg-black/65 backdrop-blur-sm text-white text-xs font-medium flex items-center gap-1.5 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              更换封面
+              <input id="input-cover-file" type="file" accept="image/*" class="hidden" />
+            </label>
+          </div>
+
+          <!-- User Avatar & Info Overlay -->
+          <div class="px-6 flex items-end justify-between -mt-12 relative z-10">
+            <div class="pt-14">
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <h3 id="profile-display-name" class="text-xl font-bold text-slate-900">昵称</h3>
+                <span id="profile-privacy-badge" class="hidden text-xs px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 font-medium">
+                  仅展示最近一个月
+                </span>
+              </div>
+              <p id="profile-phone-text" class="text-xs text-slate-500 mt-1 font-mono">手机号: 138****8000</p>
+            </div>
+            <div class="relative">
+              <img id="profile-avatar-img" src="" alt="头像"
+                class="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-md bg-slate-100" />
+              <label id="btn-change-avatar" title="更换头像"
+                class="hidden cursor-pointer absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow border-2 border-white transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <input id="input-avatar-file" type="file" accept="image/*" class="hidden" />
+              </label>
+            </div>
+          </div>
+
+          <!-- Notice Banner reinforcing No-Friend-System -->
+          <div id="other-user-banner" class="hidden mx-6 mt-4 px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs text-slate-600">
+            <span>正在浏览对方公开的朋友圈主页</span>
+            <span class="text-slate-400 font-medium">账号独立 · 无法添加好友</span>
+          </div>
+        </div>
+
+        <!-- Privacy & Account Settings View (Shown when Privacy Tab is active) -->
+        <div id="privacy-settings-view" class="hidden p-6 space-y-5 animate-fade-in">
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/70">
+            <h3 class="text-sm font-bold text-slate-900">朋友圈权限与账号安全设置</h3>
+            <p class="text-xs text-slate-500 mt-1">所有隐私规则实时生效。其他账号通过手机号搜索访问你的主页时，将严格按以下规则过滤内容。</p>
+          </div>
+
+          <!-- 1. Time Range Limit ("只能看最近一个月") -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-3">
+            <div>
+              <h4 class="text-sm font-semibold text-slate-900">允许访客查看朋友圈的时间范围</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                开启「最近一个月」后，30天前发布的动态将对其他账号自动隐藏（你自己仍可查看全部历史记录）。
+              </p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-1 max-w-md">
+              <button type="button" id="btn-range-all"
+                class="py-2.5 px-4 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                <span>全部动态可见</span>
+              </button>
+              <button type="button" id="btn-range-month"
+                class="py-2.5 px-4 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                <span>仅看最近一个月</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Global Blocklist ("不让他看我的朋友圈") -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-3">
+            <div>
+              <h4 class="text-sm font-semibold text-slate-900">不让谁看我的朋友圈（全局屏蔽名单）</h4>
+              <p class="text-xs text-slate-500 mt-1">
+                加入名单的账号即使搜索到你的手机号，也无法看到你的任何一条朋友圈。
+              </p>
+            </div>
+
+            <!-- Add account to global blocklist -->
+            <div class="flex gap-2 max-w-md">
+              <input id="block-phone-input" type="tel" maxlength="11" placeholder="输入对方11位手机号"
+                class="flex-1 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500" />
+              <button type="button" id="btn-add-global-block"
+                class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl transition whitespace-nowrap">
+                添加屏蔽
+              </button>
+            </div>
+
+            <!-- Quick pick from existing registered accounts -->
+            <div>
+              <p class="text-[11px] font-medium text-slate-400 mb-2">已注册账号快捷管理：</p>
+              <div id="global-block-candidates" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto"></div>
+            </div>
+          </div>
+
+          <!-- 3. Account Profile Edit & Permanent Account Deletion -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-4">
+            <h4 class="text-sm font-semibold text-slate-900">账号资料与注销管理</h4>
+            <div class="flex items-center gap-2 max-w-md">
+              <input id="edit-nickname-input" type="text" maxlength="16" placeholder="修改昵称"
+                class="flex-1 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500" />
+              <button type="button" id="btn-save-nickname"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition">
+                保存昵称
+              </button>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div id="settings-current-phone" class="text-xs font-semibold text-slate-700 font-mono"></div>
+                <div class="text-[11px] text-slate-400 mt-0.5">注销后将永久删除账号、所有动态及本地媒体缓存</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" id="btn-logout"
+                  class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                  退出登录
+                </button>
+                <button type="button" id="btn-settings-delete-account"
+                  class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-xs transition">
+                  永久删除账号
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Moments Feed List Container -->
+        <div id="moments-feed-container" class="divide-y divide-slate-100 flex-1">
+          <!-- Moments items rendered here -->
+        </div>
+
+      </main>
+
+      <!-- ==================== RIGHT SIDEBAR (Fixed ~310px on Desktop) ==================== -->
+      <aside class="lg:sticky lg:top-5 space-y-4">
+
+        <!-- Card 1: Current Privacy Status Summary -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">当前隐私保护状态</h3>
+            <button type="button" id="btn-right-goto-privacy" class="text-[11px] text-emerald-600 hover:underline font-medium">
+              修改设置
+            </button>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="text-slate-500">可见时间范围</span>
+              <span id="right-privacy-range" class="font-semibold text-slate-800">全部动态</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="text-slate-500">全局屏蔽人数</span>
+              <span id="right-privacy-blocked" class="font-semibold text-slate-800">0 人</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="text-slate-500">好友关系模式</span>
+              <span class="font-semibold text-emerald-600">已禁用加好友</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Quick Account Switcher (For testing multi-account privacy) -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">快捷切换测试账号</h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">切换视角验证屏蔽与一个月限制</p>
+            </div>
+            <button type="button" id="btn-reset-demo-sidebar" title="恢复内置测试账号"
+              class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">
+              重置数据
+            </button>
+          </div>
+          <div id="right-switcher-list" class="space-y-2 max-h-60 overflow-y-auto">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Card 3: All Independent Accounts Directory (Browse without adding friends) -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-3">
+          <div>
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">全站独立账号名录</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">点击任意账号直接浏览其主页动态</p>
+          </div>
+          <div id="right-directory-list" class="space-y-1.5 max-h-64 overflow-y-auto">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+    <!-- ==================== 3. PUBLISH MOMENT COMPOSER MODAL ==================== -->
+    <div id="composer-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-xl rounded-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-fade-in">
+        <!-- Modal Header -->
+        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+          <button type="button" id="btn-close-composer" class="text-sm text-slate-500 hover:text-slate-800 px-2 py-1">
+            取消
+          </button>
+          <span class="text-sm font-bold text-slate-900">发表朋友圈动态</span>
+          <button type="button" id="btn-submit-post"
+            class="px-5 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white text-xs font-semibold rounded-xl transition">
+            立即发表
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-5 overflow-y-auto space-y-4 flex-1">
+          <!-- Text Area -->
+          <textarea id="post-text-input" rows="4" placeholder="分享这一刻的想法、照片或视频..."
+            class="w-full text-sm text-slate-800 placeholder-slate-400 focus:outline-none resize-none leading-relaxed"></textarea>
+
+          <!-- Media Upload Preview Grid -->
+          <div id="composer-media-preview" class="grid grid-cols-3 gap-2.5"></div>
+
+          <!-- Upload Action Buttons -->
+          <div class="flex items-center gap-3 pt-1">
+            <label class="cursor-pointer flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700 transition">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>上传图片 (最多9张)</span>
+              <input id="input-post-images" type="file" accept="image/*" multiple class="hidden" />
+            </label>
+
+            <label class="cursor-pointer flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700 transition">
+              <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>上传视频</span>
+              <input id="input-post-video" type="file" accept="video/*" class="hidden" />
+            </label>
+          </div>
+
+          <!-- Per-Post Privacy Selector ("谁可以看 / 谁不可见") -->
+          <div class="border-t border-slate-100 pt-3.5 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                </svg>
+                <span>本条动态可见性设置</span>
+              </div>
+              <select id="post-visibility-mode" class="text-xs bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 font-medium text-slate-700 focus:outline-none">
+                <option value="public">公开（遵循全局隐私设置）</option>
+                <option value="exclude">不给谁看（指定账号不可见）</option>
+                <option value="private">私密（仅自己可见）</option>
+              </select>
+            </div>
+
+            <!-- Exclude Specific Users Box -->
+            <div id="post-exclude-users-box" class="hidden bg-slate-50 rounded-xl p-3 border border-slate-200/70 space-y-2">
+              <p class="text-[11px] text-slate-500 font-medium">勾选不可见账号（也可输入手机号添加）：</p>
+              <div class="flex gap-1.5">
+                <input id="composer-exclude-phone" type="tel" maxlength="11" placeholder="输入要屏蔽的11位手机号"
+                  class="flex-1 px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none" />
+                <button type="button" id="btn-composer-add-exclude"
+                  class="px-3 py-1.5 bg-slate-800 text-white text-xs rounded-lg font-medium">添加</button>
+              </div>
+              <div id="composer-exclude-list" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-36 overflow-y-auto"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 4. PERMANENT DELETE ACCOUNT CONFIRMATION MODAL ==================== -->
+    <div id="delete-account-modal" class="hidden fixed inset-0 z-[70] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-rose-100 space-y-4 animate-fade-in">
+        <div class="flex items-start gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">永久注销并删除当前账号</h3>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+              此操作<span class="text-rose-600 font-semibold">不可撤销</span>！确认后将彻底清除：
+            </p>
+            <ul class="text-xs text-slate-600 mt-2 space-y-1 list-disc list-inside bg-rose-50/60 p-3 rounded-xl border border-rose-100">
+              <li>当前手机号账号资料、头像与封面</li>
+              <li>您发布的所有文字、图片及视频动态</li>
+              <li>您在其他动态下的点赞与评论记录</li>
+              <li>您的隐私屏蔽配置（之后可用该手机号重新注册）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-1">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+            请输入当前手机号 <span id="delete-confirm-target-phone" class="font-mono text-rose-600 select-all"></span> 以确认删除：
+          </label>
+          <input id="delete-confirm-phone-input" type="tel" maxlength="11" placeholder="输入完整11位手机号"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-2">
+          <button type="button" id="btn-cancel-delete-account"
+            class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+            取消保留账号
+          </button>
+          <button type="button" id="btn-confirm-delete-account"
+            class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition">
+            确认永久删除
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 5. FULLSCREEN IMAGE LIGHTBOX ==================== -->
+    <div id="lightbox-modal" class="hidden fixed inset-0 z-[90] bg-black/95 flex items-center justify-center p-4">
+      <button id="btn-close-lightbox" class="absolute top-5 right-5 z-10 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-white/25 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <img id="lightbox-img" src="" alt="大图预览" class="max-w-full max-h-[90vh] object-contain rounded-xl select-none shadow-2xl" />
+    </div>
+
+  </div>
+
+  <!-- ==================== APPLICATION LOGIC & INDEXEDDB ==================== -->
+  <script>
+    /**
+     * IndexedDB Wrapper for storing large media files (Images & Videos as Blobs)
+     * Supports saving, reading ObjectURLs, and deleting media blobs upon post/account deletion.
+     */
+    const MediaDB = {
+      dbName: 'WebMomentsMediaDB',
+      storeName: 'mediaFiles',
+      db: null,
+
+      async init() {
+        return new Promise((resolve, reject) => {
+          const request = indexedDB.open(this.dbName, 1);
+          request.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(this.storeName)) {
+              db.createObjectStore(this.storeName, { keyPath: 'id' });
+            }
+          };
+          request.onsuccess = (e) => {
+            this.db = e.target.result;
+            resolve();
+          };
+          request.onerror = (e) => reject(e.target.error);
+        });
+      },
+
+      async saveMedia(id, blob, mimeType) {
+        return new Promise((resolve, reject) => {
+          const tx = this.db.transaction(this.storeName, 'readwrite');
+          const store = tx.objectStore(this.storeName);
+          store.put({ id, blob, mimeType, createdAt: Date.now() });
+          tx.oncomplete = () => resolve(id);
+          tx.onerror = (e) => reject(e.target.error);
+        });
+      },
+
+      async getMediaUrl(id) {
+        if (!id) return '';
+        if (id.startsWith('http') || id.startsWith('data:')) return id;
+        return new Promise((resolve) => {
+          const tx = this.db.transaction(this.storeName, 'readonly');
+          const store = tx.objectStore(this.storeName);
+          const req = store.get(id);
+          req.onsuccess = () => {
+            if (req.result && req.result.blob) {
+              resolve(URL.createObjectURL(req.result.blob));
+            } else {
+              resolve('');
+            }
+          };
+          req.onerror = () => resolve('');
+        });
+      },
+
+      async deleteMedia(id) {
+        if (!id || id.startsWith('http') || id.startsWith('data:')) return;
+        return new Promise((resolve) => {
+          const tx = this.db.transaction(this.storeName, 'readwrite');
+          const store = tx.objectStore(this.storeName);
+          store.delete(id);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => resolve();
+        });
+      }
+    };
+
+    /**
+     * State & LocalStorage Persistence
+     */
+    const STORAGE_KEY = 'web_moments_state_v1';
+    const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+    // Helper: Generate SVG Data URI Avatar
+    function generateAvatarSvg(char, bgHex) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+        <rect width="120" height="120" rx="24" fill="${bgHex}"/>
+        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="48" font-weight="bold">${char}</text>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    // Helper: Generate Cover SVG Data URI
+    function generateCoverSvg(c1, c2) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+        <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/>
+        </linearGradient></defs>
+        <rect width="800" height="400" fill="url(#g)"/>
+        <circle cx="650" cy="90" r="140" fill="#ffffff" fill-opacity="0.06"/>
+        <circle cx="150" cy="320" r="180" fill="#ffffff" fill-opacity="0.05"/>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    // Default Seed Data (3 accounts + posts including >30 days old posts to test 1-month privacy rule)
+    function createInitialState() {
+      const now = Date.now();
+      return {
+        currentUserPhone: null,
+        users: [
+          {
+            phone: '13800138000',
+            nickname: '林深',
+            avatar: generateAvatarSvg('林', '#059669'),
+            cover: generateCoverSvg('#064e3b', '#0f766e'),
+            visibleDays: 0, // 0 = all, 30 = last 1 month
+            blockedPhones: [] // Global blocklist: phones that cannot see this user's moments
+          },
+          {
+            phone: '13900139000',
+            nickname: '苏晴',
+            avatar: generateAvatarSvg('苏', '#4f46e5'),
+            cover: generateCoverSvg('#312e81', '#6d28d9'),
+            visibleDays: 30, // Pre-configured to "Only last 1 month" for immediate testing!
+            blockedPhones: []
+          },
+          {
+            phone: '13700137000',
+            nickname: '陈默',
+            avatar: generateAvatarSvg('陈', '#d97706'),
+            cover: generateCoverSvg('#78350f', '#b45309'),
+            visibleDays: 0,
+            blockedPhones: []
+          }
+        ],
+        posts: [
+          {
+            id: 'post_101',
+            authorPhone: '13800138000',
+            text: '周末在城市边缘徒步，不用加好友也能自由记录生活的独立朋友圈真清爽 🌲✨',
+            mediaType: 'image',
+            mediaIds: [
+              generateCoverSvg('#10b981', '#047857'),
+              generateCoverSvg('#0ea5e9', '#0369a1')
+            ],
+            visibility: 'public', // 'public' | 'exclude' | 'private'
+            excludedPhones: [],
+            createdAt: now - 2 * 3600 * 1000, // 2 hours ago
+            likes: ['13900139000'],
+            comments: [
+              { id: 'c_1', authorPhone: '13900139000', text: '光线太棒了！', createdAt: now - 3600 * 1000 }
+            ]
+          },
+          {
+            id: 'post_102',
+            authorPhone: '13900139000',
+            text: '【近期动态】下午茶时间 ☕️ 这条是最近30天内发布的，开启「仅看最近一个月」后大家依然能看到。',
+            mediaType: 'image',
+            mediaIds: [
+              generateCoverSvg('#8b5cf6', '#ec4899')
+            ],
+            visibility: 'public',
+            excludedPhones: [],
+            createdAt: now - 5 * 24 * 3600 * 1000, // 5 days ago
+            likes: ['13800138000', '13700137000'],
+            comments: []
+          },
+          {
+            id: 'post_103',
+            authorPhone: '13900139000',
+            text: '【45天前的历史动态】因为我开启了「只能看最近一个月」，所以除了我自己，其他账号搜索看我主页时看不到这条动态！',
+            mediaType: 'none',
+            mediaIds: [],
+            visibility: 'public',
+            excludedPhones: [],
+            createdAt: now - 45 * 24 * 3600 * 1000, // 45 days ago (> 30 days)
+            likes: [],
+            comments: []
+          },
+          {
+            id: 'post_104',
+            authorPhone: '13700137000',
+            text: '加班写代码的深夜，咖啡续命。这条动态设置了屏蔽「13800138000 (林深)」，林深登录后看不到这条哦。',
+            mediaType: 'none',
+            mediaIds: [],
+            visibility: 'exclude',
+            excludedPhones: ['13800138000'],
+            createdAt: now - 12 * 3600 * 1000,
+            likes: [],
+            comments: []
+          }
+        ]
+      };
+    }
+
+    let appState = loadState();
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {
+        console.error('Failed to parse state', e);
+      }
+      const initial = createInitialState();
+      saveState(initial);
+      return initial;
+    }
+
+    function saveState(state = appState) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // Current UI View State
+    let uiState = {
+      activeTab: 'discover', // 'discover' | 'my-profile' | 'user-profile' | 'privacy'
+      viewingUserPhone: null, // When activeTab === 'user-profile'
+      generatedMockCode: null,
+      composerMedia: [], // Array of { file, previewUrl, type: 'image'|'video' }
+      composerExcludedPhones: []
+    };
+
+    /**
+     * Toast Notification Helper (Replaces alert)
+     */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      const bg = type === 'error' ? 'bg-rose-600' : type === 'success' ? 'bg-emerald-600' : 'bg-slate-800';
+      el.className = `${bg} text-white text-xs font-medium px-4 py-3 rounded-2xl shadow-lg text-center animate-fade-in`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.25s';
+        setTimeout(() => el.remove(), 250);
+      }, 2400);
+    }
+
+    /**
+     * Utility Helpers
+     */
+    function getCurrentUser() {
+      return appState.users.find(u => u.phone === appState.currentUserPhone) || null;
+    }
+
+    function getUserByPhone(phone) {
+      return appState.users.find(u => u.phone === phone) || null;
+    }
+
+    function maskPhone(phone) {
+      if (!phone || phone.length < 11) return phone;
+      return phone.slice(0, 3) + '****' + phone.slice(7);
+    }
+
+    function formatTimeAgo(timestamp) {
+      const diff = Date.now() - timestamp;
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return '刚刚';
+      if (mins < 60) return `${mins}分钟前`;
+      const hours = Math.floor(mins / 60);
+      if (hours < 24) return `${hours}小时前`;
+      const days = Math.floor(hours / 24);
+      if (days <= 30) return `${days}天前`;
+      const date = new Date(timestamp);
+      return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+    }
+
+    /**
+     * Core Privacy Filter Engine
+     * Determines if `viewerPhone` is allowed to view `post` by `author`
+     */
+    function canViewPost(post, viewerPhone) {
+      // 1. Author can always see their own posts
+      if (post.authorPhone === viewerPhone) return true;
+
+      const author = getUserByPhone(post.authorPhone);
+      if (!author) return false;
+
+      // 2. Global Blocklist check ("不让谁看我的朋友圈")
+      if (author.blockedPhones && author.blockedPhones.includes(viewerPhone)) {
+        return false;
+      }
+
+      // 3. Per-post Private check ("仅自己可见")
+      if (post.visibility === 'private') {
+        return false;
+      }
+
+      // 4. Per-post Exclude list ("不给谁看")
+      if (post.visibility === 'exclude' && post.excludedPhones && post.excludedPhones.includes(viewerPhone)) {
+        return false;
+      }
+
+      // 5. Author's 30-day time range privacy setting ("只能看最近一个月")
+      if (author.visibleDays === 30) {
+        if (Date.now() - post.createdAt > THIRTY_DAYS_MS) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    /**
+     * Authentication & Login Logic
+     */
+    function renderDemoAccounts() {
+      const list = document.getElementById('demo-accounts-list');
+      list.innerHTML = '';
+      if (appState.users.length === 0) {
+        list.innerHTML = `<p class="col-span-3 text-xs text-slate-400 py-2">当前无已注册账号，请在上方输入手机号注册或点击“恢复默认演示数据”。</p>`;
+        return;
+      }
+      appState.users.forEach(user => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50/80 border border-slate-200/80 hover:border-emerald-300 transition text-left';
+        btn.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img src="${user.avatar}" class="w-9 h-9 rounded-xl object-cover shrink-0" />
+            <div class="min-w-0">
+              <div class="text-xs font-bold text-slate-800 truncate">${escapeHtml(user.nickname)}</div>
+              <div class="text-[11px] text-slate-500 font-mono truncate">${user.phone}</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-semibold text-emerald-600 px-2 py-0.5 rounded-md bg-white border border-emerald-200 shrink-0 ml-1">
+            登录
+          </span>
+        `;
+        btn.onclick = () => loginWithPhone(user.phone);
+        list.appendChild(btn);
+      });
+    }
+
+    function resetDemoData() {
+      appState = createInitialState();
+      saveState();
+      showToast('已恢复默认演示账号与测试数据', 'success');
+      renderApp();
+    }
+
+    document.getElementById('btn-reset-demo-login').onclick = resetDemoData;
+    document.getElementById('btn-reset-demo-sidebar').onclick = resetDemoData;
+
+    function loginWithPhone(phone, customNickname = '') {
+      let user = getUserByPhone(phone);
+      if (!user) {
+        const nick = customNickname.trim() || `用户${phone.slice(-4)}`;
+        const colors = ['#059669', '#2563eb', '#7c3aed', '#db2777', '#ea580c'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        user = {
+          phone,
+          nickname: nick,
+          avatar: generateAvatarSvg(nick[0], color),
+          cover: generateCoverSvg('#1e293b', '#334155'),
+          visibleDays: 0,
+          blockedPhones: []
+        };
+        appState.users.push(user);
+      }
+      appState.currentUserPhone = phone;
+      saveState();
+      uiState.activeTab = 'discover';
+      uiState.viewingUserPhone = null;
+      showToast(`欢迎回来，${user.nickname}`, 'success');
+      renderApp();
+    }
+
+    // Phone Input Listener to detect new vs existing account
+    document.getElementById('login-phone').addEventListener('input', (e) => {
+      const val = e.target.value.replace(/\D/g, '');
+      e.target.value = val;
+      const nickBox = document.getElementById('new-user-nickname-box');
+      if (val.length === 11 && !getUserByPhone(val)) {
+        nickBox.classList.remove('hidden');
+      } else {
+        nickBox.classList.add('hidden');
+      }
+    });
+
+    // Send Mock Verification Code
+    document.getElementById('btn-send-code').addEventListener('click', () => {
+      const phone = document.getElementById('login-phone').value.trim();
+      if (!/^1\d{10}$/.test(phone)) {
+        showToast('请输入正确的11位手机号码', 'error');
+        return;
+      }
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      uiState.generatedMockCode = code;
+      document.getElementById('login-code').value = code;
+      const hint = document.getElementById('mock-code-hint');
+      hint.textContent = `模拟短信验证码：${code}（已自动填入）`;
+      hint.classList.remove('hidden');
+      showToast(`验证码已发送：${code}`, 'success');
+    });
+
+    // Submit Login Form
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('login-phone').value.trim();
+      const code = document.getElementById('login-code').value.trim();
+      const nickname = document.getElementById('login-nickname').value.trim();
+
+      if (!/^1\d{10}$/.test(phone)) {
+        showToast('请输入有效的11位手机号', 'error');
+        return;
+      }
+      if (!code || code.length < 4) {
+        showToast('请点击“获取验证码”并输入验证码', 'error');
+        return;
+      }
+      loginWithPhone(phone, nickname);
+    });
+
+    /**
+     * Navigation & View Rendering
+     */
+    function switchTab(tab, targetPhone = null) {
+      uiState.activeTab = tab;
+      uiState.viewingUserPhone = targetPhone;
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('nav-discover').onclick = () => switchTab('discover');
+    document.getElementById('nav-my-profile').onclick = () => switchTab('my-profile');
+    document.getElementById('nav-privacy').onclick = () => switchTab('privacy');
+    document.getElementById('btn-back-home').onclick = () => switchTab('discover');
+
+    async function renderApp() {
+      const currentUser = getCurrentUser();
+      const loginView = document.getElementById('login-view');
+      const mainView = document.getElementById('main-view');
+
+      if (!currentUser) {
+        loginView.classList.remove('hidden');
+        mainView.classList.add('hidden');
+        renderDemoAccounts();
+        return;
+      }
+
+      loginView.classList.add('hidden');
+      mainView.classList.remove('hidden');
+
+      // Update Header User Pill & Left Sidebar Profile Card
+      const avatarUrl = await MediaDB.getMediaUrl(currentUser.avatar);
+      document.getElementById('sidebar-user-avatar').src = avatarUrl;
+      document.getElementById('sidebar-user-name').textContent = currentUser.nickname;
+      document.getElementById('sidebar-user-phone').textContent = currentUser.phone;
+      const myPostsCount = appState.posts.filter(p => p.authorPhone === currentUser.phone).length;
+      document.getElementById('sidebar-post-count').textContent = `${myPostsCount} 条`;
+
+      // Update Left Sidebar Nav Active Colors
+      const navMap = {
+        'discover': 'nav-discover',
+        'user-profile': 'nav-discover',
+        'my-profile': 'nav-my-profile',
+        'privacy': 'nav-privacy'
+      };
+      ['nav-discover', 'nav-my-profile', 'nav-privacy'].forEach(id => {
+        const el = document.getElementById(id);
+        if (navMap[uiState.activeTab] === id) {
+          el.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-700 transition';
+        } else {
+          el.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition';
+        }
+      });
+
+      // Render Right Sidebar Cards
+      await renderRightSidebar(currentUser);
+
+      // Toggle Subsections based on Active Tab
+      const searchSection = document.getElementById('search-bar-section');
+      const coverSection = document.getElementById('profile-cover-section');
+      const privacyView = document.getElementById('privacy-settings-view');
+      const feedContainer = document.getElementById('moments-feed-container');
+      const btnBackHome = document.getElementById('btn-back-home');
+      const headerTitle = document.getElementById('header-title');
+
+      searchSection.classList.add('hidden');
+      coverSection.classList.add('hidden');
+      privacyView.classList.add('hidden');
+      feedContainer.classList.add('hidden');
+      btnBackHome.classList.add('hidden');
+
+      if (uiState.activeTab === 'discover') {
+        headerTitle.textContent = '朋友圈广场';
+        searchSection.classList.remove('hidden');
+        feedContainer.classList.remove('hidden');
+        await renderFeed('all');
+      } else if (uiState.activeTab === 'my-profile') {
+        headerTitle.textContent = '我的朋友圈';
+        coverSection.classList.remove('hidden');
+        feedContainer.classList.remove('hidden');
+        await renderProfileHeader(currentUser, true);
+        await renderFeed(currentUser.phone);
+      } else if (uiState.activeTab === 'user-profile') {
+        const targetUser = getUserByPhone(uiState.viewingUserPhone);
+        if (!targetUser) {
+          switchTab('discover');
+          return;
+        }
+        btnBackHome.classList.remove('hidden');
+        headerTitle.textContent = `${targetUser.nickname}的朋友圈`;
+        coverSection.classList.remove('hidden');
+        feedContainer.classList.remove('hidden');
+        await renderProfileHeader(targetUser, targetUser.phone === currentUser.phone);
+        await renderFeed(targetUser.phone);
+      } else if (uiState.activeTab === 'privacy') {
+        headerTitle.textContent = '隐私与账号设置';
+        privacyView.classList.remove('hidden');
+        renderPrivacySettings();
+      }
+    }
+
+    /**
+     * Render Right Sidebar: Privacy Summary, Quick Account Switcher, and Independent Accounts Directory
+     */
+    async function renderRightSidebar(currentUser) {
+      // 1. Privacy Summary
+      document.getElementById('right-privacy-range').textContent =
+        currentUser.visibleDays === 30 ? '仅看最近一个月' : '全部动态可见';
+      document.getElementById('right-privacy-range').className =
+        currentUser.visibleDays === 30 ? 'font-semibold text-amber-600' : 'font-semibold text-slate-800';
+      document.getElementById('right-privacy-blocked').textContent = `${currentUser.blockedPhones.length} 人`;
+
+      // 2. Quick Account Switcher
+      const switcherList = document.getElementById('right-switcher-list');
+      switcherList.innerHTML = '';
+      for (const u of appState.users) {
+        const isCurrent = u.phone === currentUser.phone;
+        const uAvatar = await MediaDB.getMediaUrl(u.avatar);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `w-full flex items-center justify-between p-2 rounded-xl border text-left transition ${
+          isCurrent ? 'bg-emerald-50/70 border-emerald-300' : 'bg-slate-50/70 hover:bg-slate-100 border-slate-100'
+        }`;
+        btn.innerHTML = `
+          <div class="flex items-center gap-2 min-w-0">
+            <img src="${uAvatar}" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+            <div class="min-w-0">
+              <div class="text-xs font-bold text-slate-800 truncate">${escapeHtml(u.nickname)}</div>
+              <div class="text-[10px] text-slate-400 font-mono truncate">${u.phone}</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md shrink-0 ${
+            isCurrent ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
+          }">
+            ${isCurrent ? '当前' : '切换'}
+          </span>
+        `;
+        btn.onclick = () => {
+          if (!isCurrent) loginWithPhone(u.phone);
+        };
+        switcherList.appendChild(btn);
+      }
+
+      // 3. Independent Accounts Directory (No friend adding)
+      const dirList = document.getElementById('right-directory-list');
+      dirList.innerHTML = '';
+      for (const u of appState.users) {
+        const uAvatar = await MediaDB.getMediaUrl(u.avatar);
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition';
+        row.onclick = () => openUserProfile(u.phone);
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img src="${uAvatar}" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+            <div class="min-w-0">
+              <div class="text-xs font-semibold text-slate-800 truncate flex items-center gap-1.5">
+                <span>${escapeHtml(u.nickname)}</span>
+                ${u.visibleDays === 30 ? '<span class="text-[9px] px-1 py-0.2 bg-amber-100 text-amber-700 rounded">限30天</span>' : ''}
+              </div>
+              <div class="text-[10px] text-slate-400 font-mono">${maskPhone(u.phone)}</div>
+            </div>
+          </div>
+          <span class="text-[11px] font-medium text-moments-link hover:underline shrink-0">查看主页 →</span>
+        `;
+        dirList.appendChild(row);
+      }
+    }
+
+    document.getElementById('btn-right-goto-privacy').onclick = () => switchTab('privacy');
+
+    async function renderProfileHeader(user, isOwner) {
+      const coverUrl = await MediaDB.getMediaUrl(user.cover);
+      const avatarUrl = await MediaDB.getMediaUrl(user.avatar);
+
+      document.getElementById('profile-cover-img').src = coverUrl;
+      document.getElementById('profile-avatar-img').src = avatarUrl;
+      document.getElementById('profile-display-name').textContent = user.nickname;
+      document.getElementById('profile-phone-text').textContent = `手机号：${isOwner ? user.phone : maskPhone(user.phone)}`;
+
+      const privacyBadge = document.getElementById('profile-privacy-badge');
+      if (user.visibleDays === 30) {
+        privacyBadge.classList.remove('hidden');
+      } else {
+        privacyBadge.classList.add('hidden');
+      }
+
+      const btnCover = document.getElementById('btn-change-cover');
+      const btnAvatar = document.getElementById('btn-change-avatar');
+      const otherBanner = document.getElementById('other-user-banner');
+
+      if (isOwner) {
+        btnCover.classList.remove('hidden');
+        btnAvatar.classList.remove('hidden');
+        otherBanner.classList.add('hidden');
+      } else {
+        btnCover.classList.add('hidden');
+        btnAvatar.classList.add('hidden');
+        otherBanner.classList.remove('hidden');
+      }
+    }
+
+    /**
+     * Render Moments Feed (Filtered by Privacy Rules)
+     */
+    async function renderFeed(filterAuthorPhone) {
+      const currentUser = getCurrentUser();
+      const container = document.getElementById('moments-feed-container');
+      container.innerHTML = '';
+
+      // Sort newest first
+      const sortedPosts = [...appState.posts].sort((a, b) => b.createdAt - a.createdAt);
+
+      // Filter by target author if viewing profile
+      let candidatePosts = filterAuthorPhone === 'all'
+        ? sortedPosts
+        : sortedPosts.filter(p => p.authorPhone === filterAuthorPhone);
+
+      // Apply strict privacy checks
+      const visiblePosts = candidatePosts.filter(post => canViewPost(post, currentUser.phone));
+
+      if (visiblePosts.length === 0) {
+        const targetUser = filterAuthorPhone !== 'all' ? getUserByPhone(filterAuthorPhone) : null;
+        let emptyReason = '暂无可见的朋友圈动态';
+        if (targetUser && targetUser.phone !== currentUser.phone) {
+          if (targetUser.blockedPhones.includes(currentUser.phone)) {
+            emptyReason = '对方已设置隐私权限，暂不可见';
+          } else if (targetUser.visibleDays === 30) {
+            emptyReason = '对方仅展示最近一个月的动态，暂无可看内容';
+          }
+        }
+        container.innerHTML = `
+          <div class="py-16 px-6 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <p class="text-sm font-medium text-slate-600">${emptyReason}</p>
+            <p class="text-xs text-slate-400 mt-1">可通过顶部搜索框查找其他手机号查看其动态</p>
+          </div>
+        `;
+        return;
+      }
+
+      for (const post of visiblePosts) {
+        const author = getUserByPhone(post.authorPhone);
+        if (!author) continue;
+
+        const isOwner = post.authorPhone === currentUser.phone;
+        const isOlderThan30Days = (Date.now() - post.createdAt) > THIRTY_DAYS_MS;
+        const authorAvatarUrl = await MediaDB.getMediaUrl(author.avatar);
+
+        // Privacy tag badge visible only to the author
+        let ownerPrivacyBadge = '';
+        if (isOwner) {
+          if (post.visibility === 'private') {
+            ownerPrivacyBadge = `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">仅自己可见</span>`;
+          } else if (post.visibility === 'exclude' && post.excludedPhones.length > 0) {
+            ownerPrivacyBadge = `<span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-50 text-rose-600">已屏蔽${post.excludedPhones.length}人</span>`;
+          } else if (author.visibleDays === 30 && isOlderThan30Days) {
+            ownerPrivacyBadge = `<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">超30天·访客不可见</span>`;
+          }
+        }
+
+        // Media HTML generation
+        let mediaHtml = '';
+        if (post.mediaType === 'image' && post.mediaIds && post.mediaIds.length > 0) {
+          const urls = await Promise.all(post.mediaIds.map(id => MediaDB.getMediaUrl(id)));
+          const validUrls = urls.filter(Boolean);
+          if (validUrls.length === 1) {
+            mediaHtml = `
+              <div class="mt-2.5">
+                <img src="${validUrls[0]}" onclick="openLightbox('${validUrls[0]}')"
+                  class="max-h-64 max-w-[85%] rounded-xl object-cover cursor-zoom-in border border-slate-100" />
+              </div>`;
+          } else if (validUrls.length > 1) {
+            const gridCols = validUrls.length === 4 ? 'grid-cols-2 max-w-[240px]' : 'grid-cols-3 max-w-[300px]';
+            const imgs = validUrls.map(url => `
+              <div class="aspect-square rounded-lg overflow-hidden bg-slate-100 border border-slate-100">
+                <img src="${url}" onclick="openLightbox('${url}')" class="w-full h-full object-cover cursor-zoom-in hover:scale-105 transition duration-200" />
+              </div>
+            `).join('');
+            mediaHtml = `<div class="mt-2.5 grid ${gridCols} gap-1.5">${imgs}</div>`;
+          }
+        } else if (post.mediaType === 'video' && post.mediaIds && post.mediaIds.length > 0) {
+          const videoUrl = await MediaDB.getMediaUrl(post.mediaIds[0]);
+          if (videoUrl) {
+            mediaHtml = `
+              <div class="mt-2.5 rounded-xl overflow-hidden bg-black max-w-[88%] border border-slate-200">
+                <video src="${videoUrl}" controls playsinline preload="metadata" class="w-full max-h-72 object-contain"></video>
+              </div>`;
+          }
+        }
+
+        // Likes & Comments HTML
+        const hasLiked = post.likes.includes(currentUser.phone);
+        const likerNames = post.likes.map(p => {
+          const u = getUserByPhone(p);
+          return u ? u.nickname : maskPhone(p);
+        });
+
+        const visibleComments = post.comments.filter(c => {
+          const commenter = getUserByPhone(c.authorPhone);
+          return commenter && !commenter.blockedPhones.includes(currentUser.phone);
+        });
+
+        let interactionsHtml = '';
+        if (likerNames.length > 0 || visibleComments.length > 0) {
+          const likesRow = likerNames.length > 0 ? `
+            <div class="px-2.5 py-1.5 text-xs text-moments-link font-medium flex items-start gap-1.5 ${visibleComments.length > 0 ? 'border-b border-slate-200/70' : ''}">
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+              </svg>
+              <span class="leading-relaxed">${likerNames.join('，')}</span>
+            </div>` : '';
+
+          const commentsRows = visibleComments.map(c => {
+            const cUser = getUserByPhone(c.authorPhone);
+            const cName = cUser ? cUser.nickname : maskPhone(c.authorPhone);
+            const canDeleteComment = c.authorPhone === currentUser.phone || isOwner;
+            return `
+              <div class="px-2.5 py-1 text-xs leading-relaxed flex items-start justify-between gap-2 group">
+                <div>
+                  <span onclick="openUserProfile('${c.authorPhone}')" class="font-semibold text-moments-link cursor-pointer hover:underline">${cName}</span>
+                  <span class="text-slate-700">：${escapeHtml(c.text)}</span>
+                </div>
+                ${canDeleteComment ? `<button onclick="deleteComment('${post.id}', '${c.id}')" class="text-[10px] text-slate-400 hover:text-rose-500 shrink-0">删除</button>` : ''}
+              </div>`;
+          }).join('');
+
+          interactionsHtml = `
+            <div class="mt-2.5 bg-moments-panel rounded-xl overflow-hidden">
+              ${likesRow}
+              <div class="py-1">${commentsRows}</div>
+            </div>`;
+        }
+
+        const article = document.createElement('article');
+        article.className = 'p-4 flex gap-3 bg-white hover:bg-slate-50/40 transition';
+        article.innerHTML = `
+          <img src="${authorAvatarUrl}" onclick="openUserProfile('${author.phone}')"
+            class="w-10 h-10 rounded-xl object-cover shrink-0 cursor-pointer bg-slate-100 border border-slate-100" />
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <button onclick="openUserProfile('${author.phone}')" class="text-sm font-bold text-moments-link hover:underline truncate">
+                  ${escapeHtml(author.nickname)}
+                </button>
+                ${ownerPrivacyBadge}
+              </div>
+              <span class="text-[11px] text-slate-400 font-mono shrink-0">${maskPhone(author.phone)}</span>
+            </div>
+
+            ${post.text ? `<p class="text-sm text-slate-800 mt-1 whitespace-pre-wrap break-words leading-relaxed">${escapeHtml(post.text)}</p>` : ''}
+            ${mediaHtml}
+
+            <!-- Footer Meta & Actions -->
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex items-center gap-3 text-[11px] text-slate-400">
+                <span>${formatTimeAgo(post.createdAt)}</span>
+                ${isOwner ? `<button onclick="deletePost('${post.id}')" class="text-moments-link hover:text-rose-600">删除</button>` : ''}
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="toggleLike('${post.id}')"
+                  class="px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1 transition ${hasLiked ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}">
+                  <svg class="w-3.5 h-3.5" fill="${hasLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  <span>${hasLiked ? '已赞' : '赞'}</span>
+                </button>
+
+                <button onclick="toggleCommentBox('${post.id}')"
+                  class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-medium flex items-center gap-1 transition">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  <span>评论</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Inline Comment Input Box -->
+            <div id="comment-box-${post.id}" class="hidden mt-2.5 flex gap-1.5 animate-fade-in">
+              <input id="comment-input-${post.id}" type="text" maxlength="140" placeholder="写评论..."
+                onkeydown="if(event.key==='Enter') submitComment('${post.id}')"
+                class="flex-1 px-3 py-1.5 bg-slate-100 rounded-lg text-xs focus:outline-none focus:bg-white focus:ring-1 focus:ring-emerald-500" />
+              <button onclick="submitComment('${post.id}')"
+                class="px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg">发送</button>
+            </div>
+
+            ${interactionsHtml}
+          </div>
+        `;
+        container.appendChild(article);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    /**
+     * Search Accounts by Phone or Nickname (No Friend Adding)
+     */
+    const searchInput = document.getElementById('account-search-input');
+    const searchResultsPanel = document.getElementById('search-results-panel');
+    const searchResultsList = document.getElementById('search-results-list');
+    const btnClearSearch = document.getElementById('btn-clear-search');
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      if (!q) {
+        searchResultsPanel.classList.add('hidden');
+        btnClearSearch.classList.add('hidden');
+        return;
+      }
+      btnClearSearch.classList.remove('hidden');
+
+      const matches = appState.users.filter(u =>
+        u.phone.includes(q) || u.nickname.toLowerCase().includes(q)
+      );
+
+      searchResultsPanel.classList.remove('hidden');
+      searchResultsList.innerHTML = '';
+
+      if (matches.length === 0) {
+        searchResultsList.innerHTML = `<p class="text-xs text-slate-400 py-2 px-1.5">未找到匹配的手机号或昵称</p>`;
+        return;
+      }
+
+      matches.forEach(user => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-2 rounded-xl bg-white hover:bg-emerald-50/60 border border-slate-100 cursor-pointer transition';
+        item.onclick = () => openUserProfile(user.phone);
+        item.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <img src="${user.avatar}" class="w-9 h-9 rounded-xl object-cover" />
+            <div>
+              <div class="text-xs font-bold text-slate-800">${escapeHtml(user.nickname)}</div>
+              <div class="text-[11px] text-slate-400 font-mono">${user.phone}</div>
+            </div>
+          </div>
+          <span class="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">
+            查看朋友圈 →
+          </span>
+        `;
+        searchResultsList.appendChild(item);
+      });
+    });
+
+    btnClearSearch.onclick = () => {
+      searchInput.value = '';
+      searchResultsPanel.classList.add('hidden');
+      btnClearSearch.classList.add('hidden');
+    };
+
+    window.openUserProfile = function(phone) {
+      const currentUser = getCurrentUser();
+      if (phone === currentUser.phone) {
+        switchTab('my-profile');
+      } else {
+        switchTab('user-profile', phone);
+      }
+    };
+
+    /**
+     * Post Interactions: Like, Comment, Delete
+     */
+    window.toggleLike = function(postId) {
+      const currentUser = getCurrentUser();
+      const post = appState.posts.find(p => p.id === postId);
+      if (!post) return;
+
+      const idx = post.likes.indexOf(currentUser.phone);
+      if (idx > -1) {
+        post.likes.splice(idx, 1);
+      } else {
+        post.likes.push(currentUser.phone);
+      }
+      saveState();
+      renderApp();
+    };
+
+    window.toggleCommentBox = function(postId) {
+      const box = document.getElementById(`comment-box-${postId}`);
+      if (!box) return;
+      box.classList.toggle('hidden');
+      if (!box.classList.contains('hidden')) {
+        document.getElementById(`comment-input-${postId}`).focus();
+      }
+    };
+
+    window.submitComment = function(postId) {
+      const currentUser = getCurrentUser();
+      const input = document.getElementById(`comment-input-${postId}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const post = appState.posts.find(p => p.id === postId);
+      if (!post) return;
+
+      post.comments.push({
+        id: 'c_' + Date.now(),
+        authorPhone: currentUser.phone,
+        text,
+        createdAt: Date.now()
+      });
+      saveState();
+      renderApp();
+    };
+
+    window.deleteComment = function(postId, commentId) {
+      const post = appState.posts.find(p => p.id === postId);
+      if (!post) return;
+      post.comments = post.comments.filter(c => c.id !== commentId);
+      saveState();
+      renderApp();
+      showToast('评论已删除');
+    };
+
+    window.deletePost = function(postId) {
+      appState.posts = appState.posts.filter(p => p.id !== postId);
+      saveState();
+      renderApp();
+      showToast('动态已删除');
+    };
+
+    /**
+     * Publish Moment Composer (Text, Multi-Image, Video, Per-post Privacy)
+     */
+    const composerModal = document.getElementById('composer-modal');
+    const postVisibilitySelect = document.getElementById('post-visibility-mode');
+    const postExcludeBox = document.getElementById('post-exclude-users-box');
+
+    document.getElementById('btn-open-composer').onclick = () => {
+      uiState.composerMedia = [];
+      uiState.composerExcludedPhones = [];
+      document.getElementById('post-text-input').value = '';
+      postVisibilitySelect.value = 'public';
+      postExcludeBox.classList.add('hidden');
+      renderComposerMediaPreview();
+      renderComposerExcludeList();
+      composerModal.classList.remove('hidden');
+    };
+
+    document.getElementById('btn-close-composer').onclick = () => {
+      composerModal.classList.add('hidden');
+    };
+
+    postVisibilitySelect.onchange = () => {
+      if (postVisibilitySelect.value === 'exclude') {
+        postExcludeBox.classList.remove('hidden');
+        renderComposerExcludeList();
+      } else {
+        postExcludeBox.classList.add('hidden');
+      }
+    };
+
+    function renderComposerExcludeList() {
+      const currentUser = getCurrentUser();
+      const list = document.getElementById('composer-exclude-list');
+      list.innerHTML = '';
+
+      const otherUsers = appState.users.filter(u => u.phone !== currentUser.phone);
+      // Also include any custom phone added manually
+      const allCandidatePhones = new Set([
+        ...otherUsers.map(u => u.phone),
+        ...uiState.composerExcludedPhones
+      ]);
+
+      allCandidatePhones.forEach(phone => {
+        const u = getUserByPhone(phone);
+        const checked = uiState.composerExcludedPhones.includes(phone);
+        const row = document.createElement('label');
+        row.className = 'flex items-center justify-between p-1.5 rounded-lg bg-white border border-slate-100 cursor-pointer text-xs';
+        row.innerHTML = `
+          <div class="flex items-center gap-2">
+            <input type="checkbox" ${checked ? 'checked' : ''} class="rounded text-emerald-600 focus:ring-0" />
+            <span class="font-medium text-slate-700">${u ? escapeHtml(u.nickname) : '未注册账号'}</span>
+            <span class="text-slate-400 font-mono text-[11px]">${phone}</span>
+          </div>
+          <span class="text-[10px] ${checked ? 'text-rose-600 font-semibold' : 'text-slate-400'}">${checked ? '不可见' : '可见'}</span>
+        `;
+        row.querySelector('input').onchange = (e) => {
+          if (e.target.checked) {
+            if (!uiState.composerExcludedPhones.includes(phone)) uiState.composerExcludedPhones.push(phone);
+          } else {
+            uiState.composerExcludedPhones = uiState.composerExcludedPhones.filter(p => p !== phone);
+          }
+          renderComposerExcludeList();
+        };
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('btn-composer-add-exclude').onclick = () => {
+      const input = document.getElementById('composer-exclude-phone');
+      const phone = input.value.trim();
+      if (!/^1\d{10}$/.test(phone)) {
+        showToast('请输入有效的11位手机号', 'error');
+        return;
+      }
+      if (phone === getCurrentUser().phone) {
+        showToast('不能屏蔽自己', 'error');
+        return;
+      }
+      if (!uiState.composerExcludedPhones.includes(phone)) {
+        uiState.composerExcludedPhones.push(phone);
+      }
+      input.value = '';
+      renderComposerExcludeList();
+    };
+
+    // Handle Image Uploads (up to 9)
+    document.getElementById('input-post-images').onchange = (e) => {
+      const files = Array.from(e.target.files);
+      if (!files.length) return;
+
+      // Clear video if switching to images
+      if (uiState.composerMedia.some(m => m.type === 'video')) {
+        uiState.composerMedia = [];
+      }
+
+      const remaining = 9 - uiState.composerMedia.length;
+      const selected = files.slice(0, remaining);
+      selected.forEach(file => {
+        uiState.composerMedia.push({
+          file,
+          previewUrl: URL.createObjectURL(file),
+          type: 'image'
+        });
+      });
+      e.target.value = '';
+      renderComposerMediaPreview();
+    };
+
+    // Handle Video Upload (1 video)
+    document.getElementById('input-post-video').onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      uiState.composerMedia = [{
+        file,
+        previewUrl: URL.createObjectURL(file),
+        type: 'video'
+      }];
+      e.target.value = '';
+      renderComposerMediaPreview();
+    };
+
+    function renderComposerMediaPreview() {
+      const grid = document.getElementById('composer-media-preview');
+      grid.innerHTML = '';
+
+      uiState.composerMedia.forEach((item, idx) => {
+        const cell = document.createElement('div');
+        if (item.type === 'video') {
+          cell.className = 'col-span-3 relative rounded-xl overflow-hidden bg-black';
+          cell.innerHTML = `
+            <video src="${item.previewUrl}" controls class="w-full max-h-48 object-contain"></video>
+            <button type="button" onclick="removeComposerMedia(${idx})"
+              class="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/70 text-white text-xs flex items-center justify-center">✕</button>
+          `;
+        } else {
+          cell.className = 'aspect-square relative rounded-xl overflow-hidden bg-slate-100 border border-slate-200';
+          cell.innerHTML = `
+            <img src="${item.previewUrl}" class="w-full h-full object-cover" />
+            <button type="button" onclick="removeComposerMedia(${idx})"
+              class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white text-[10px] flex items-center justify-center">✕</button>
+          `;
+        }
+        grid.appendChild(cell);
+      });
+    }
+
+    window.removeComposerMedia = function(idx) {
+      uiState.composerMedia.splice(idx, 1);
+      renderComposerMediaPreview();
+    };
+
+    // Submit New Post
+    document.getElementById('btn-submit-post').onclick = async () => {
+      const currentUser = getCurrentUser();
+      const text = document.getElementById('post-text-input').value.trim();
+
+      if (!text && uiState.composerMedia.length === 0) {
+        showToast('请输入文字或选择图片/视频', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-post');
+      btn.disabled = true;
+      btn.textContent = '发布中...';
+
+      try {
+        const mediaIds = [];
+        let mediaType = 'none';
+
+        if (uiState.composerMedia.length > 0) {
+          mediaType = uiState.composerMedia[0].type;
+          for (let i = 0; i < uiState.composerMedia.length; i++) {
+            const item = uiState.composerMedia[i];
+            const id = `media_${Date.now()}_${i}_${Math.random().toString(36).slice(2, 7)}`;
+            await MediaDB.saveMedia(id, item.file, item.file.type);
+            mediaIds.push(id);
+          }
+        }
+
+        const visibility = postVisibilitySelect.value;
+        const newPost = {
+          id: 'post_' + Date.now(),
+          authorPhone: currentUser.phone,
+          text,
+          mediaType,
+          mediaIds,
+          visibility,
+          excludedPhones: visibility === 'exclude' ? [...uiState.composerExcludedPhones] : [],
+          createdAt: Date.now(),
+          likes: [],
+          comments: []
+        };
+
+        appState.posts.unshift(newPost);
+        saveState();
+        composerModal.classList.add('hidden');
+        showToast('发布成功！', 'success');
+        await renderApp();
+      } catch (err) {
+        console.error(err);
+        showToast('媒体保存失败，请重试', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '发表';
+      }
+    };
+
+    /**
+     * Profile Avatar & Cover Upload
+     */
+    document.getElementById('input-cover-file').onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const id = `cover_${Date.now()}`;
+      await MediaDB.saveMedia(id, file, file.type);
+      const user = getCurrentUser();
+      user.cover = id;
+      saveState();
+      showToast('封面更换成功', 'success');
+      renderApp();
+    };
+
+    document.getElementById('input-avatar-file').onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const id = `avatar_${Date.now()}`;
+      await MediaDB.saveMedia(id, file, file.type);
+      const user = getCurrentUser();
+      user.avatar = id;
+      saveState();
+      showToast('头像更换成功', 'success');
+      renderApp();
+    };
+
+    /**
+     * Privacy Settings Logic ("只能看最近一个月" & Global Blocklist)
+     */
+    function renderPrivacySettings() {
+      const currentUser = getCurrentUser();
+      const btnAll = document.getElementById('btn-range-all');
+      const btnMonth = document.getElementById('btn-range-month');
+
+      if (currentUser.visibleDays === 30) {
+        btnMonth.className = 'py-2.5 px-3 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-700 text-xs font-bold flex items-center justify-center gap-1.5 transition';
+        btnAll.className = 'py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-slate-600 text-xs font-medium flex items-center justify-center gap-1.5 transition';
+      } else {
+        btnAll.className = 'py-2.5 px-3 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-700 text-xs font-bold flex items-center justify-center gap-1.5 transition';
+        btnMonth.className = 'py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-slate-600 text-xs font-medium flex items-center justify-center gap-1.5 transition';
+      }
+
+      document.getElementById('edit-nickname-input').value = currentUser.nickname;
+      document.getElementById('settings-current-phone').textContent = `当前登录：${currentUser.phone}`;
+
+      // Render Global Blocklist Candidates
+      const candidatesBox = document.getElementById('global-block-candidates');
+      candidatesBox.innerHTML = '';
+
+      const otherPhones = new Set([
+        ...appState.users.filter(u => u.phone !== currentUser.phone).map(u => u.phone),
+        ...currentUser.blockedPhones
+      ]);
+
+      if (otherPhones.size === 0) {
+        candidatesBox.innerHTML = `<p class="text-xs text-slate-400">暂无其他账号</p>`;
+        return;
+      }
+
+      otherPhones.forEach(phone => {
+        const u = getUserByPhone(phone);
+        const isBlocked = currentUser.blockedPhones.includes(phone);
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100';
+        row.innerHTML = `
+          <div>
+            <span class="text-xs font-semibold text-slate-800">${u ? escapeHtml(u.nickname) : '外部手机号'}</span>
+            <span class="text-[11px] text-slate-400 font-mono ml-1.5">${phone}</span>
+          </div>
+          <button type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
+            isBlocked ? 'bg-rose-600 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-rose-300'
+          }">
+            ${isBlocked ? '已屏蔽 (点击解除)' : '设为其不可见'}
+          </button>
+        `;
+        row.querySelector('button').onclick = () => {
+          if (isBlocked) {
+            currentUser.blockedPhones = currentUser.blockedPhones.filter(p => p !== phone);
+            showToast(`已解除对 ${phone} 的屏蔽`);
+          } else {
+            currentUser.blockedPhones.push(phone);
+            showToast(`已屏蔽 ${phone}，对方将无法查看你的任何动态`, 'success');
+          }
+          saveState();
+          renderPrivacySettings();
+        };
+        candidatesBox.appendChild(row);
+      });
+    }
+
+    document.getElementById('btn-range-all').onclick = () => {
+      const user = getCurrentUser();
+      user.visibleDays = 0;
+      saveState();
+      renderPrivacySettings();
+      showToast('已设为：允许查看全部朋友圈', 'success');
+    };
+
+    document.getElementById('btn-range-month').onclick = () => {
+      const user = getCurrentUser();
+      user.visibleDays = 30;
+      saveState();
+      renderPrivacySettings();
+      renderApp();
+      showToast('已设为：仅允许查看最近一个月的动态', 'success');
+    };
+
+    document.getElementById('btn-add-global-block').onclick = () => {
+      const currentUser = getCurrentUser();
+      const input = document.getElementById('block-phone-input');
+      const phone = input.value.trim();
+
+      if (!/^1\d{10}$/.test(phone)) {
+        showToast('请输入有效的11位手机号', 'error');
+        return;
+      }
+      if (phone === currentUser.phone) {
+        showToast('不能屏蔽自己', 'error');
+        return;
+      }
+      if (!currentUser.blockedPhones.includes(phone)) {
+        currentUser.blockedPhones.push(phone);
+        saveState();
+        showToast(`已将 ${phone} 加入全局不可见名单`, 'success');
+      } else {
+        showToast('该手机号已在屏蔽名单中');
+      }
+      input.value = '';
+      renderPrivacySettings();
+      renderApp();
+    };
+
+    document.getElementById('btn-save-nickname').onclick = () => {
+      const currentUser = getCurrentUser();
+      const newNick = document.getElementById('edit-nickname-input').value.trim();
+      if (!newNick) {
+        showToast('昵称不能为空', 'error');
+        return;
+      }
+      currentUser.nickname = newNick;
+      saveState();
+      renderApp();
+      showToast('昵称修改成功', 'success');
+    };
+
+    document.getElementById('btn-logout').onclick = () => {
+      appState.currentUserPhone = null;
+      saveState();
+      renderApp();
+      showToast('已退出登录');
+    };
+
+    document.getElementById('btn-logout-sidebar').onclick = () => {
+      appState.currentUserPhone = null;
+      saveState();
+      renderApp();
+      showToast('已退出登录');
+    };
+
+    /**
+     * Permanent Account Deletion (注销并删除当前账号)
+     * Cascades cleanup across users, posts, likes/comments, blocklists, and IndexedDB media.
+     */
+    const deleteAccountModal = document.getElementById('delete-account-modal');
+
+    function openDeleteAccountModal() {
+      const currentUser = getCurrentUser();
+      if (!currentUser) return;
+      document.getElementById('delete-confirm-target-phone').textContent = currentUser.phone;
+      document.getElementById('delete-confirm-phone-input').value = '';
+      deleteAccountModal.classList.remove('hidden');
+    }
+
+    document.getElementById('btn-open-delete-account').onclick = openDeleteAccountModal;
+    document.getElementById('btn-settings-delete-account').onclick = openDeleteAccountModal;
+
+    document.getElementById('btn-cancel-delete-account').onclick = () => {
+      deleteAccountModal.classList.add('hidden');
+    };
+
+    document.getElementById('btn-confirm-delete-account').onclick = async () => {
+      const currentUser = getCurrentUser();
+      if (!currentUser) return;
+
+      const typedPhone = document.getElementById('delete-confirm-phone-input').value.trim();
+      if (typedPhone !== currentUser.phone) {
+        showToast('输入的手机号与当前账号不一致，请核对', 'error');
+        return;
+      }
+
+      const targetPhone = currentUser.phone;
+      const btn = document.getElementById('btn-confirm-delete-account');
+      btn.disabled = true;
+      btn.textContent = '正在清理数据...';
+
+      try {
+        // 1. Collect all IndexedDB media IDs owned by this user (avatar, cover, and all post media)
+        const mediaIdsToDelete = [currentUser.avatar, currentUser.cover];
+        const userPosts = appState.posts.filter(p => p.authorPhone === targetPhone);
+        userPosts.forEach(p => {
+          if (Array.isArray(p.mediaIds)) {
+            mediaIdsToDelete.push(...p.mediaIds);
+          }
+        });
+
+        for (const mId of mediaIdsToDelete) {
+          await MediaDB.deleteMedia(mId);
+        }
+
+        // 2. Remove all posts created by this user
+        appState.posts = appState.posts.filter(p => p.authorPhone !== targetPhone);
+
+        // 3. Remove this user's likes, comments, and per-post exclusions from remaining posts
+        appState.posts.forEach(post => {
+          post.likes = post.likes.filter(phone => phone !== targetPhone);
+          post.comments = post.comments.filter(c => c.authorPhone !== targetPhone);
+          if (Array.isArray(post.excludedPhones)) {
+            post.excludedPhones = post.excludedPhones.filter(phone => phone !== targetPhone);
+          }
+        });
+
+        // 4. Remove this user from other users' global blocklists
+        appState.users.forEach(u => {
+          if (Array.isArray(u.blockedPhones)) {
+            u.blockedPhones = u.blockedPhones.filter(phone => phone !== targetPhone);
+          }
+        });
+
+        // 5. Permanently remove user from users array and clear current session
+        appState.users = appState.users.filter(u => u.phone !== targetPhone);
+        appState.currentUserPhone = null;
+        saveState();
+
+        deleteAccountModal.classList.add('hidden');
+        showToast(`账号 ${targetPhone} 已永久注销并清理所有数据`, 'success');
+        await renderApp();
+      } catch (err) {
+        console.error('Error deleting account:', err);
+        showToast('注销账号时出现异常，请重试', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '确认永久删除';
+      }
+    };
+
+    /**
+     * Fullscreen Lightbox
+     */
+    window.openLightbox = function(url) {
+      document.getElementById('lightbox-img').src = url;
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+    };
+    document.getElementById('btn-close-lightbox').onclick = () => {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+    };
+    document.getElementById('lightbox-modal').onclick = (e) => {
+      if (e.target.id === 'lightbox-modal') {
+        document.getElementById('lightbox-modal').classList.add('hidden');
+      }
+    };
+
+    /**
+     * Initialize App on Load
+     */
+    window.onload = async function() {
+      await MediaDB.init();
+      await renderApp();
+    };
+  </script>
+</body>
+</html>

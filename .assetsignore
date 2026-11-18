@@ -1,0 +1,7 @@
+# 这些文件不随站点发布（wrangler 读取 assets.directory 时会跳过）
+wrangler.jsonc
+.assetsignore
+README-部署说明.md
+.git/
+.gitignore
+node_modules/
